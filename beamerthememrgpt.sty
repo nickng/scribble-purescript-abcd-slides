@@ -1,0 +1,221 @@
+% ///////////////////////////////////////////////////////////////
+%
+% The provided presentation template `iclpt' is based on the
+% templates provided with the `beamer' package. The College
+% logo and the background image were taken from the homepage
+% of Imperial College London. As far as I understand the images
+% are provided by Imperial College London for its staff and
+% students, and for academic and non-profit use only.
+%
+% The `mrgpt' template is modified from `iclpt' for Mobility Reading Group
+%
+% ///////////////////////////////////////////////////////////////
+%
+% [2016/04/13 v2.1 Add progressbar,lighttheme option]
+% [2015/06/05 v2.0 MRG Presentation Template]
+% [2010/06/00 v1.1 Imperial College London Presentation Template]
+%
+% Thanks to Claudio Belotti for useful feedback.
+%
+% ///////////////////////////////////////////////////////////////
+%
+%
+% Copyright (c) 2008, Daniel Wagner, www.PrettyPrinting.net
+%
+% Permission is hereby granted, free of charge, to any person
+% obtaining a copy of this template and associated
+% documentation files (the "Template"), to deal in the Template
+% without restriction, including without limitation the rights to
+% use, copy, modify, merge, publish, distribute, sublicense,
+% and/or sell copies of the Template, and to permit persons to
+% whom the Template is furnished to do so, subject to the
+% following conditions:
+%
+% The above copyright notice and this permission notice shall be
+% included in all copies or substantial portions of the Template.
+%
+% THE TEMPLATE IS PROVIDED ``AS IS'', WITHOUT WARRANTY OF ANY KIND,
+% EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES
+% OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND
+% NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT
+% HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY,
+% WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING
+% FROM, OUT OF OR IN CONNECTION WITH THE TEMPLATE OR THE USE OR
+% OTHER DEALINGS IN THE TEMPLATE.
+%
+% /////////////////////////////////////////////////////////////////
+
+\DeclareBoolOption[true]{slidenumber} % Show slide number
+\DeclareBoolOption[true]{titlepage}   % Use 1st slide as title slide?
+\DeclareBoolOption[false]{progressbar}% Show progress bar
+\DeclareBoolOption[false]{lighttheme} % Use 'light' theme
+\DeclareStringOption[]{hashtag}[]     % Hashtag
+\DeclareStringOption[mrg.doc.ic.ac.uk]{url}[mrg.doc.ic.ac.uk]
+\ProcessKeyvalOptions*
+
+\definecolor{beamer@icdarkblue}{RGB}{0,51,102}
+\definecolor{beamer@icmiddleblue}{RGB}{0,82,150}
+\definecolor{beamer@iclightblue}{RGB}{200,212,232}
+\definecolor{beamer@icmiddlered}{RGB}{204,51,0}
+\definecolor{beamer@iclightred}{RGB}{232,212,32}
+
+\setbeamercolor{normal text}{fg=black,bg=white}
+\setbeamercolor{alerted text}{fg=red}
+\setbeamercolor{example text}{fg=green!50!black}
+
+\renewcommand{\emph}{\alert}
+
+\setbeamercolor{structure}{fg=beamer@icmiddleblue}
+
+\setbeamertemplate{blocks}[rounded][shadow=true]
+
+\setbeamercolor{block title}{fg=beamer@iclightblue,bg=beamer@icmiddleblue}
+\setbeamercolor{block body}{fg=beamer@icdarkblue,bg=beamer@iclightblue}
+
+\setbeamercolor{block title alerted}{fg=beamer@iclightred,bg=beamer@icmiddlered}
+\setbeamercolor{block body alerted}{fg=beamer@icmiddlered,bg=beamer@iclightred}
+
+\ifbeamerthememrgpt@lighttheme
+  \setbeamercolor{author in head/foot}{fg=beamer@icdarkblue,bg=beamer@iclightblue}
+\else
+  \setbeamercolor{author in head/foot}{fg=beamer@iclightblue,bg=beamer@icmiddleblue}
+\fi
+\setbeamercolor{institute in head/foot}{}
+
+\setbeamercolor{subtitle}{fg=black!60}
+
+\setbeamercolor*{titlelike}{parent=structure}
+
+\newcommand{\@showprogressbar}{%
+  \ifbeamerthememrgpt@progressbar{%
+    \ifbeamerthememrgpt@lighttheme
+      \color{beamer@icmiddleblue}
+    \else
+      \color{beamer@icmiddlered}%
+    \fi
+    \hspace*{-\beamer@leftmargin}%
+    \rule{\beamer@leftmargin}{1pt}%
+    \rlap{\rule{\dimexpr
+      \beamer@startpageofframe\dimexpr
+      \beamer@rightmargin+\textwidth\relax/\beamer@endpageofdocument}{0.6pt}}
+
+    \vspace{0\baselineskip}%
+    {}
+  }
+  \fi
+}
+
+\newcommand{\@showfootlinelogo}{%
+  \begin{minipage}[c]{0.08\textwidth}
+    \ifbeamerthememrgpt@lighttheme
+      \includegraphics[trim=1cm 1cm 1cm 1cm,height=.3cm]{images/mrg-sessiontype.pdf}
+      \else%
+        \colorbox{white}{\includegraphics[trim=1cm 1cm 1cm 1cm,height=.3cm]{images/mrg-sessiontype.pdf}}
+    \fi
+  \end{minipage}
+  \begin{minipage}[c]{0.54\textwidth}%
+    \usebeamerfont{author in head/foot}
+    \insertshortauthor
+    {\it \insertshorttitle}
+  \end{minipage}\hfill%
+}
+
+\defbeamertemplate*{frametitle}{mrgpt theme}
+{
+\begin{beamercolorbox}[center,wd=\textwidth]{frametitle}
+  \usebeamerfont{frametitle}\insertframetitle
+  \ifx\insertframesubtitle\@empty%
+  \else%
+    \vskip0.1em%
+    {\usebeamerfont{subtitle}\usebeamercolor[fg]{subtitle}\insertframesubtitle\par}%
+  \fi
+\end{beamercolorbox}%
+}
+
+\defbeamertemplate*{headline}{mrgpt theme}
+{%
+\ifbeamerthememrgpt@titlepage%
+  \ifnum \insertpagenumber=1
+    \begin{beamercolorbox}[leftskip=.1cm,rightskip=.1cm,ht=.7cm,dp=0.1cm,wd=\textwidth]{institute in head/foot}
+      \includegraphics[height=.6cm]{images/icl.pdf}
+      \hfill
+      \includegraphics[height=.6cm]{images/mrg-sessiontype.pdf}
+    \end{beamercolorbox}%
+  \fi
+\fi
+}
+
+\defbeamertemplate*{footline}{mrgpt theme}
+{%
+\ifbeamerthememrgpt@titlepage%
+  \ifnum \insertpagenumber=1
+  \else
+    \@showprogressbar
+  \fi
+\else
+  \@showprogressbar
+\fi
+\begin{beamercolorbox}[ht=.3cm,dp=0.2cm,wd=\textwidth,leftskip=.3cm,rightskip=.3cm]{author in head/foot}%
+  \ifbeamerthememrgpt@titlepage%
+    \ifnum \insertpagenumber=1
+      \begin{minipage}[c]{0.62\textwidth}% Title page
+        \usebeamerfont{author in head/foot}
+        \insertshortauthor
+        {\it \insertshorttitle}
+      \end{minipage}\hfill%
+    \else% Not title page
+      \@showfootlinelogo
+    \fi
+  \else% Not title page
+    \@showfootlinelogo
+  \fi
+  \begin{minipage}[c]{0.32\textwidth}
+    \hfill
+    \ifx\beamerthememrgpt@url\@empty% URL
+    \else%
+      \textsf{\href{http://\beamerthememrgpt@url}{\beamerthememrgpt@url}}\hspace{1em}
+    \fi
+    \ifx\beamerthememrgpt@hashtag\@empty% Hashtag
+    \else%
+      \texttt{\#\beamerthememrgpt@hashtag}
+    \fi
+    \ifbeamerthememrgpt@slidenumber% Slide number
+      \ifbeamerthememrgpt@titlepage% Don't show slide number on title page
+        \ifnum \insertpagenumber=1
+        \else
+          \usebeamerfont{footline}%
+          \usebeamercolor[fg]{footline}%
+          \hspace{1em}\raisebox{-0.4mm}{{\large\insertframenumber}/\inserttotalframenumber}%
+        \fi
+      \fi
+    \fi
+  \end{minipage}
+\end{beamercolorbox}%
+}
+
+\setbeamertemplate{background canvas}{\includegraphics[width=\paperwidth]{images/background.pdf}}
+
+\defbeamertemplate*{title page}{mrgpt}[1][]
+{
+  \vbox{}
+  \vfill
+  \begin{centering}
+    \begin{beamercolorbox}[sep=8pt,center,#1]{title}
+      \usebeamerfont{title}\inserttitle\par%
+      \ifx\insertsubtitle\@empty%
+      \else%
+        \vskip0.25em%
+        {\usebeamerfont{subtitle}\usebeamercolor[fg]{subtitle}\insertsubtitle\par}%
+      \fi
+    \end{beamercolorbox}%
+    \vskip1em\par
+    \begin{beamercolorbox}[sep=8pt,center,#1]{author}
+      \usebeamerfont{author}\insertauthor
+    \end{beamercolorbox}
+    \begin{beamercolorbox}[sep=8pt,center,#1]{date}
+      \usebeamerfont{institute}\insertdate
+    \end{beamercolorbox}\vskip0.5em
+    {\usebeamercolor[fg]{titlegraphic}\inserttitlegraphic\par}
+  \end{centering}
+  \vfill
+}

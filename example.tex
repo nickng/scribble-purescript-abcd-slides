@@ -1,0 +1,33 @@
+\documentclass{beamer}
+\graphicspath{{images/}}
+%\usetheme{iclpt}
+% slidenumber (default true) turns on slide numbering
+% titlepage   (default true) treats first slide as title slide (with IC/MRG logo)
+% progressbar (default false) turns on progress indicator at bottom of slide
+% lightheme   (default false) uses a 'light' theme with more subtle bottom bar
+% hashtag=STR (default empty) adds a hashtag
+% url=STR     (default mrg.doc.ic.ac.uk) add URL on bottom of slide
+\usetheme[progressbar]{mrgpt}
+\usepackage{roboto} % Use for fonts magic if using xelatex instead of pdflatex
+
+\title{MRG template demo}
+\subtitle{Catchy subtitle}
+\author{First, Last}
+\date{Day Month Year}
+
+\begin{document}
+\maketitle
+
+\begin{frame}{Frame title}{Subtitle}
+  This is the MRG template.
+  \begin{itemize}
+    \item Top level bullet point.
+      \begin{itemize}
+        \item Second level bullet point.
+          \begin{itemize}
+            \item Third (last) level bullet point.
+          \end{itemize}
+      \end{itemize}
+  \end{itemize}
+\end{frame}
+\end{document}
