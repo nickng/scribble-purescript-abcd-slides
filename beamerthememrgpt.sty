@@ -50,7 +50,9 @@
 \DeclareBoolOption[false]{progressbar}% Show progress bar
 \DeclareBoolOption[false]{lighttheme} % Use 'light' theme
 \DeclareStringOption[]{hashtag}[]     % Hashtag
-\DeclareStringOption[mrg.doc.ic.ac.uk]{url}[mrg.doc.ic.ac.uk]
+\DeclareStringOption[background]{background}[background]       % Background
+\DeclareStringOption[mrg-sessiontype]{sublogo}[mrg-sessiontype]% Sub logo
+\DeclareStringOption[mrg.doc.ic.ac.uk]{url}[mrg.doc.ic.ac.uk]  % URL
 \ProcessKeyvalOptions*
 
 \definecolor{beamer@icdarkblue}{RGB}{0,51,102}
@@ -108,9 +110,15 @@
 \newcommand{\@showfootlinelogo}{%
   \begin{minipage}[c]{0.08\textwidth}
     \ifbeamerthememrgpt@lighttheme
-      \includegraphics[trim=1cm 1cm 1cm 1cm,height=.3cm]{images/mrg-sessiontype.pdf}
+      \ifx\beamerthememrgpt@sublogo\@empty%
       \else%
-        \colorbox{white}{\includegraphics[trim=1cm 1cm 1cm 1cm,height=.3cm]{images/mrg-sessiontype.pdf}}
+        \includegraphics[trim=1cm 1cm 1cm 1cm,height=.3cm]{\beamerthememrgpt@sublogo}
+      \fi
+    \else
+      \ifx\beamerthememrgpt@sublogo\@empty%
+      \else%
+        \colorbox{white}{\includegraphics[trim=1cm 1cm 1cm 1cm,height=.3cm]{\beamerthememrgpt@sublogo}}
+      \fi
     \fi
   \end{minipage}
   \begin{minipage}[c]{0.54\textwidth}%
@@ -137,9 +145,12 @@
 \ifbeamerthememrgpt@titlepage%
   \ifnum \insertpagenumber=1
     \begin{beamercolorbox}[leftskip=.1cm,rightskip=.1cm,ht=.7cm,dp=0.1cm,wd=\textwidth]{institute in head/foot}
-      \includegraphics[height=.6cm]{images/icl.pdf}
+      \includegraphics[height=.6cm]{icl.pdf}
       \hfill
-      \includegraphics[height=.6cm]{images/mrg-sessiontype.pdf}
+      \ifx\beamerthememrgpt@sublogo\@empty%
+      \else%
+        \includegraphics[height=.6cm]{\beamerthememrgpt@sublogo}
+      \fi
     \end{beamercolorbox}%
   \fi
 \fi
@@ -193,7 +204,10 @@
 \end{beamercolorbox}%
 }
 
-\setbeamertemplate{background canvas}{\includegraphics[width=\paperwidth]{images/background.pdf}}
+\ifx\beamerthememrgpt@background\@empty
+\else
+  \setbeamertemplate{background canvas}{\includegraphics[width=\paperwidth]{\beamerthememrgpt@background}}
+\fi
 
 \defbeamertemplate*{title page}{mrgpt}[1][]
 {
