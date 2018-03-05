@@ -11,6 +11,9 @@
 %
 % ///////////////////////////////////////////////////////////////
 %
+% [2017/03/05 v2.3 Fix missing slidenumber when titlepage is false,
+%                  Add sectionheader option]
+% [2017/03/01 v2.2 Change block style]
 % [2016/04/13 v2.1 Add progressbar,lighttheme option]
 % [2015/06/05 v2.0 MRG Presentation Template]
 % [2010/06/00 v1.1 Imperial College London Presentation Template]
@@ -49,6 +52,7 @@
 \DeclareBoolOption[true]{titlepage}   % Use 1st slide as title slide?
 \DeclareBoolOption[false]{progressbar}% Show progress bar
 \DeclareBoolOption[false]{lighttheme} % Use 'light' theme
+\DeclareBoolOption[false]{sectionheader}% Add section header on all slides
 \DeclareStringOption[]{hashtag}[]     % Hashtag
 \DeclareStringOption[background]{background}[background]       % Background
 \DeclareStringOption[mrg-sessiontype]{sublogo}[mrg-sessiontype]% Sub logo
@@ -69,7 +73,8 @@
 
 \setbeamercolor{structure}{fg=beamer@icmiddleblue}
 
-\setbeamertemplate{blocks}[rounded][shadow=true]
+\setbeamertemplate{blocks}[square]
+\setbeamertemplate{itemize items}[square]
 
 \setbeamercolor{block title}{fg=beamer@iclightblue,bg=beamer@icmiddleblue}
 \setbeamercolor{block body}{fg=beamer@icdarkblue,bg=beamer@iclightblue}
@@ -79,8 +84,10 @@
 
 \ifbeamerthememrgpt@lighttheme
   \setbeamercolor{author in head/foot}{fg=beamer@icdarkblue,bg=beamer@iclightblue}
+  \setbeamercolor{section in head/foot}{fg=beamer@icdarkblue,bg=beamer@iclightblue}
 \else
   \setbeamercolor{author in head/foot}{fg=beamer@iclightblue,bg=beamer@icmiddleblue}
+  \setbeamercolor{section in head/foot}{fg=beamer@iclightblue,bg=beamer@icmiddleblue}
 \fi
 \setbeamercolor{institute in head/foot}{}
 
@@ -128,9 +135,25 @@
   \end{minipage}\hfill%
 }
 
+\newcommand{\@insertslidenumber}{%
+  \usebeamerfont{footline}
+  \usebeamercolor[fg]{footline}%
+  \hspace{1em}\raisebox{-0.4mm}{{\large\insertframenumber}/\inserttotalframenumber}%
+}
+
+\ifbeamerthememrgpt@sectionheader%
+  % Remove navigation symbols because they get pushed too far down into footline
+  \setbeamertemplate{navigation symbols}{}
+\fi
+
 \defbeamertemplate*{frametitle}{mrgpt theme}
 {
 \begin{beamercolorbox}[center,wd=\textwidth]{frametitle}
+  \ifbeamerthememrgpt@sectionheader%
+    \vskip2ex%
+  \else%
+    \vskip0.1em%
+  \fi
   \usebeamerfont{frametitle}\insertframetitle
   \ifx\insertframesubtitle\@empty%
   \else%
@@ -152,6 +175,15 @@
         \includegraphics[height=.6cm]{\beamerthememrgpt@sublogo}
       \fi
     \end{beamercolorbox}%
+  \fi
+\fi
+\ifbeamerthememrgpt@sectionheader% Section name header
+  \ifnum \insertpagenumber>1
+    \hbox{%
+      \begin{beamercolorbox}[wd=\paperwidth,ht=2.5ex,dp=1.125ex]{section in head/foot}%
+        \insertsectionnavigationhorizontal{\paperwidth}{}{\hskip0pt plus1filll}
+      \end{beamercolorbox}%
+    }
   \fi
 \fi
 }
@@ -192,12 +224,11 @@
     \fi
     \ifbeamerthememrgpt@slidenumber% Slide number
       \ifbeamerthememrgpt@titlepage% Don't show slide number on title page
-        \ifnum \insertpagenumber=1
-        \else
-          \usebeamerfont{footline}%
-          \usebeamercolor[fg]{footline}%
-          \hspace{1em}\raisebox{-0.4mm}{{\large\insertframenumber}/\inserttotalframenumber}%
+        \ifnum \insertpagenumber>1
+          \@insertslidenumber{}
         \fi
+      \else%
+        \@insertslidenumber{}
       \fi
     \fi
   \end{minipage}
