@@ -1,0 +1,3 @@
+ local protocol P_S(role C)
+ { Msg(int)    to C;
+   Reply(bool) from C; }

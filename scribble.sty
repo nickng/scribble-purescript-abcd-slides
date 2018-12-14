@@ -1,0 +1,47 @@
+\NeedsTeXFormat{LaTeX2e}
+\ProvidesPackage{scribble}[27/07/2018 1.0.0 Scribble]
+
+\RequirePackage[final]{listings}
+\RequirePackage{xcolor}
+
+\lstdefinelanguage{Scribble}{%
+  morekeywords={module,role,global,local,import,at,protocol,to,from,choice,or,continue,package,do,sig,type},
+  morekeywords=[2]{int,float,char,string},
+  morecomment=[n]{/*}{*/},
+  morecomment=[l]{//},
+  morestring=[b]\",
+}
+
+\definecolor{scribble@ident}{rgb}{0,0,0}
+\definecolor{scribble@datatype}{rgb}{0,0.6,0}
+\definecolor{scribble@keyword}{rgb}{0.13,0.13,0.9}
+\definecolor{scribble@comment}{rgb}{0.5,0.5,0.5}
+\colorlet{scribble@string}{violet}
+
+\lstdefinestyle{Scribble}{%
+  basicstyle={\scriptsize\ttfamily},
+  identifierstyle=\color{scribble@ident},
+  stringstyle=\color{scribble@string},
+  commentstyle={\itshape\color{scribble@comment}},
+  keywordstyle={\color{scribble@keyword}},
+  keywordstyle=[2]{\color{scribble@datatype}},
+  extendedchars=true,
+  showstringspaces=false,
+  escapeinside={/*<}{>*/},
+  columns=flexible,
+  tabsize=2,
+  mathescape=true,
+  breaklines=true,
+  %float=hbp,
+  captionpos=b,
+}
+
+\lstdefinestyle{ScribbleWithLN}{%
+  style=Scribble,
+  numbers=left,
+  numberstyle=\tiny\sffamily\color{scribble@comment},
+  xleftmargin=1.5em,
+  framexleftmargin=0.8em,
+}
+
+\newcommand{\lstscribble}{\lstinline[language=Scribble,style=Scribble]}
