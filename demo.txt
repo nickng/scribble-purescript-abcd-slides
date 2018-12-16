@@ -1,0 +1,18 @@
+module Playground;
+
+type <purescript> "String" from "Prim" as String;
+type <purescript> "QResult" from "ScribblePlayground" as QResult;
+
+global protocol Playground(role C, role S) {
+    choice at C {
+        Verify(String) from C to S; // WF checks
+        Result(QResult) from S to C;
+    } or {
+        Project(String, String, String) from C to S;
+        Result(QResult) from S to C;
+    } or {
+        FSM(String, String, String) from C to S;
+        Result(QResult) from S to C;
+    }
+    do Playground(C , S);
+}
