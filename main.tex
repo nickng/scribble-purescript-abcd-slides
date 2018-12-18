@@ -23,12 +23,15 @@
   language=Haskell,
   morekeywords={foreign},
   morekeywords=[2]{Cons,Nil},
+  morekeywords=[3]{Initial,Terminal,Send,Receive,Select,Branch},
 }
 \lstdefinestyle{hask}{
   basicstyle=\ttfamily,
   keywordstyle=\bfseries\color{blue},
   keywordstyle=[2]{\bfseries\color{green!40!black}},
+  keywordstyle=[3]{\bfseries\color{red!90}},
   numberstyle=\sffamily\small,
+  stringstyle=\color{purple},
   mathescape=true,
   captionpos=b,
 }
@@ -65,7 +68,7 @@
         \item PureScript: strongly-typed functional language, compiles to JavaScript
         \item WebSocket: full-duplex communication from the browser
       \end{itemize}
-    \item Encoding of local types/Endpoint FSMs as type classes and constraints
+    \item Embedding of local types/Endpoint FSMs as type classes and constraints
     \item Jonathan King's final year Master's project
     \item 8-months of term time work (concurrent with lectures)
   \end{itemize}
@@ -134,9 +137,9 @@
     \node [anchor=base,xshift=2.5em,inner sep=1,fill=yellow!10] {conformance}
      edge [densely dotted,out=0,in=0,shorten <=0.5em] (lplabel.east);}
   \begin{itemize}
-    \item Static type checking against implementation
-    \item Runtime monitoring
-    \item APIs/code generation from session types
+    \item Direct static type checking against implementation
+    \item Runtime monitoring/checks
+    \item APIs/code generation from session types \uncover<2>{$\Leftarrow$}
   \end{itemize}
 \end{frame}
 
@@ -217,7 +220,7 @@
        node [midway,label] {\scriptsize Translate} ($(eex.north west)+(3em,0)$);
       \draw ($(eex.south west)+(3em,-1)$)
        edge [->,draw=gray]
-       node [midway,label] {\scriptsize Generate} ($(pex.north west)+(3em,0)$);
+       node [midway,label] {\scriptsize Generate/Embed} ($(pex.north west)+(3em,0)$);
     \end{tikzpicture}
   } % resizebox
 \end{frame}
@@ -235,7 +238,7 @@
     Explicit connection actions (FASE'17)  &      &\\
     Typestate generation (SCP, 2017)       & Java &\small Java methods\\
     Linear decomposition (ECOOP'17)        & Scala&\small TCP, shared mem., Akka actors\\
-    Session Type Provider (CC'18)          & F\#  &\small TCP\\
+    Session Type Provider (CC'18)\footnote{Talk before this}     & F\#  &\small TCP\\
     Role-parametric MPST (POPL'19)\footnote{Talk this afternoon} & Go   &\small TCP, shared mem.\\
     \bottomrule
   \end{tabular}
@@ -311,7 +314,7 @@
     \item Build real-world applications using functional techniques and expressive types, such as:
       \begin{itemize}
         \item Algebraic data types and pattern matching
-        \item \alert<2>{Row polymorphism} and extensible records
+        \item Row polymorphism and extensible records
         \item Higher kinded types
         \item \alert<2>{Type classes with functional dependencies}
         \item Higher-rank polymorphism
@@ -320,13 +323,13 @@
 \end{frame}
 
 \begin{frame}{PureScript code generation}
-  From the EFSM, PureScript types are generated:
+  PureScript types are generated from the EFSMs, informally:
   \begin{itemize}
     \item Each \textbf{state} is a type
     \item Each \textbf{transition} is a type class instance
   \end{itemize}
 
-  The core (multi-parameter) type classes:
+  The (multi-parameter) type classes for each kind of \textit{transition}:
   \begin{itemize}
     \item Send: message send
     \item Recv: message receive
@@ -336,7 +339,7 @@
 \end{frame}
 
 \begin{frame}[fragile]{EFSM transitions as type classes (1)}
-  \textbf{Send} and \textbf{Receive} type classes, parametersed by $s$, $t$, $a$\\
+  (Simplified) \textbf{Send} and \textbf{Receive} type classes, parametrised by $s$, $t$, $a$\\
   \begin{minipage}{0.48\textwidth}
     \begin{lstlisting}[language=Haskell,style=hask,basicstyle=\ttfamily\footnotesize]
 class Send $s^!$ $t$ $a$ | $s^!$ $\leadsto$ $t$ $a$
@@ -368,7 +371,7 @@ class Recv $s^?$ $t$ $a$ | $s^?$ $\leadsto$ $t$ $a$
   \end{minipage}
 \end{frame}
 \begin{frame}[fragile]{EFSM transitions as type classes (2)}
-  \textbf{Selection} and \textbf{Branching} type classes, parameterised by $ts$\\
+  (Simplified) \textbf{Selection} and \textbf{Branching} type classes, parameterised by $ts$\\
   \begin{minipage}{0.48\textwidth}
     \begin{lstlisting}[language=Haskell,style=hask,basicstyle=\ttfamily\footnotesize]
 class Select $s^!$ $ts$ | $s^!$ $\leadsto$ $ts$
@@ -405,8 +408,8 @@ class Branch $s^?$ $ts$ | $s^?$ $\leadsto$ $ts$
 \begin{frame}[fragile]{EFSM as typing constraints}
   \begin{itemize}
     \item Constrained by types and \textit{functional dependencies}
-    \item Effectively encoding EFSMs as types: type checks = conformance
-    \item State transitions linearity ensured by \textbf{Indexed Monad}
+    \item Effectively embedding EFSMs as types: type checks = conformance
+    \item State transitions linearity ensured by Indexed Monad
   \end{itemize}
   \begin{center}
   \includegraphics[width=0.8\linewidth]{fsm.png}
@@ -441,13 +444,14 @@ instance receiveS13 :: Receive Server S13 S9 Result
 \end{frame}
 
 \begin{frame}{Scribble playground}{Demo}
-  \href{http://scribble.jlk.co/}{Scribble}
+  \href{http://127.0.0.1:8100/}{Scribble}
   \\[2ex]
-  Omitted details in talk:
+  Omitted in talk:
   \begin{itemize}
-    \item Web framework (Halogen library)
+    \item Runtime
+    \item Web framework (Halogen library (?))
     \item Connection actions
-    \item Error handling
+    \item Error handling and reporting
   \end{itemize}
 \end{frame}
 
@@ -460,5 +464,6 @@ instance receiveS13 :: Receive Server S13 S9 Result
     \item [\bf Write] \textcolor{proc}{web application} endpoint in PureScript
     \item [\bf Run] type-safe web application
   \end{description}
+  (And we have a new Scribble playground!)
 \end{frame}
 \end{document}
