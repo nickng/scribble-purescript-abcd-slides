@@ -1,8 +1,10 @@
-mrg-beamer-template
-===================
+Scribble-PureScript ABCD slides
+===============================
 
-This is the MRG LaTeX beamer theme.
-The theme is based on the Imperial College LaTeX theme
-([iclpt](http://www.prettyprinting.net/imperial/)) modified for MRG.
+**Type-safe interactive web service generation from Scribble**.
+Jonathan King, Nicholas Ng, Nobuko Yoshida.
 
-See `example.tex` for usage example.
+
+Slides for [ABCD](http://groups.inf.ed.a.uk/abcd) project meeting,
+[Dec 2018](http://groups.inf.ed.ac.uk/abcd/meeting-december2018/index.html) in
+London.
